@@ -1,36 +1,36 @@
 #!/usr/bin/env bash
 # ============================================================
-#  AI + 3D 项目 macOS 一键安装脚本
-#  自动创建 venv 并安装 requirements.txt 中的依赖
+#  AI + 3D project - macOS one-click installer
+#  Creates a venv and installs requirements.txt
 # ============================================================
 set -euo pipefail
 
-# 切到脚本所在目录，后续全部使用相对路径
+# Run from the script's own directory; all paths are relative
 cd "$(dirname "$0")"
 
-# 1. 检查 Python
+# 1. Check Python
 if ! command -v python3 >/dev/null 2>&1; then
-    echo "[错误] 未检测到 python3，请先安装 Python 3.12（推荐）"
+    echo "[ERROR] python3 not found. Install Python 3.12 first."
     exit 1
 fi
 
-echo "[1/3] 创建虚拟环境 venv ..."
+echo "[1/3] Creating virtual environment venv ..."
 if [ ! -d "venv" ]; then
     python3 -m venv venv
 else
-    echo "      venv 已存在，跳过创建"
+    echo "      venv already exists, skipping"
 fi
 
-echo "[2/3] 激活虚拟环境并升级 pip ..."
+echo "[2/3] Activating venv and upgrading pip ..."
 # shellcheck disable=SC1091
 source venv/bin/activate
 python -m pip install --upgrade pip
 
-echo "[3/3] 安装依赖 ..."
+echo "[3/3] Installing dependencies ..."
 python -m pip install -r requirements.txt
 
 echo ""
 echo "============================================================"
-echo " 安装完成！后续开发请先激活环境："
+echo " Done! Activate the environment before developing:"
 echo "     source venv/bin/activate"
 echo "============================================================"

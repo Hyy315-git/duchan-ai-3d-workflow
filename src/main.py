@@ -37,4 +37,4 @@ if __name__ == "__main__":
         os.makedirs(d, exist_ok=True)
     ai_edge()
     lattice_3d()
-    print("完成: output/ai_edge.png, output/lattice_3d.png")
+    print("Done: output/ai_edge.png, output/lattice_3d.png")

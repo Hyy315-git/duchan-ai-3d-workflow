@@ -10,7 +10,7 @@
 | 1.2 | Git 可用 | `git --version` | 正常输出版本号 |
 | 1.3 | 克隆仓库 | `git clone <repo-url>` | 无报错，文件齐全 |
 | 1.4 | 一键安装 | Windows：`install.bat` / macOS：`./install.sh` | 创建 venv 并装好依赖，无报错 |
-| 1.5 | 激活环境 | `venv\Scripts\activate` / `source venv/bin/activate` | 命令前缀出现 `(venv)` |
+| 1.5 | 一键启动 | Windows：`run.bat` / macOS：`./run.sh` | 自动激活 venv 并运行，无报错 |
 
 ## 二、AI 部分（对照「AI + 3D」AI 要求）
 

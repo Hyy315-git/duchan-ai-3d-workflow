@@ -1,48 +1,48 @@
 @echo off
 rem ============================================================
-rem  AI + 3D 项目 Windows 一键安装脚本
-rem  自动创建 venv 并安装 requirements.txt 中的依赖
+rem  AI + 3D project - Windows one-click installer
+rem  Creates a venv and installs requirements.txt
 rem ============================================================
 setlocal
 
-rem 切到脚本所在目录，后续全部使用相对路径
+rem Run from the script's own directory; all paths are relative
 cd /d "%~dp0"
 
-rem 1. 检查 Python
+rem 1. Check Python
 where python >nul 2>nul
 if errorlevel 1 (
-    echo [错误] 未检测到 Python，请先安装 Python 3.12（推荐）并勾选 "Add to PATH"
+    echo [ERROR] Python not found. Install Python 3.12 and check "Add to PATH".
     pause
     exit /b 1
 )
 
-echo [1/3] 创建虚拟环境 venv ...
+echo [1/3] Creating virtual environment venv ...
 if not exist venv (
     python -m venv venv
     if errorlevel 1 (
-        echo [错误] 创建虚拟环境失败
+        echo [ERROR] Failed to create venv
         pause
         exit /b 1
     )
 ) else (
-    echo       venv 已存在，跳过创建
+    echo       venv already exists, skipping
 )
 
-echo [2/3] 激活虚拟环境并升级 pip ...
+echo [2/3] Activating venv and upgrading pip ...
 call venv\Scripts\activate.bat
 python -m pip install --upgrade pip
 
-echo [3/3] 安装依赖 ...
+echo [3/3] Installing dependencies ...
 python -m pip install -r requirements.txt
 if errorlevel 1 (
-    echo [错误] 依赖安装失败
+    echo [ERROR] Dependency installation failed
     pause
     exit /b 1
 )
 
 echo.
 echo ============================================================
-echo  安装完成！后续开发请先激活环境：
+echo  Done! Activate the environment before developing:
 echo      venv\Scripts\activate.bat
 echo ============================================================
 pause

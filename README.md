@@ -25,6 +25,8 @@
 ├── requirements.txt               # 精确锁定版本的依赖清单
 ├── install.bat                    # Windows 一键安装脚本
 ├── install.sh                     # macOS 一键安装脚本
+├── run.bat                        # Windows 一键启动脚本
+├── run.sh                         # macOS 一键启动脚本
 ├── .gitignore
 └── README.md
 ```
@@ -39,6 +41,17 @@
 
 > 依赖已包含 `pyglet<2` 与 `scipy`：二者是 trimesh 4.4.9 离屏渲染的必要组件，缺一不可。
 
+### 依赖清单（全部精确锁定版本）
+
+| 包 | 版本 | 用途 |
+| --- | --- | --- |
+| numpy | 2.0.2 | 生成测试图案 |
+| opencv-python | 4.10.0.84 | 高斯模糊 + Canny 边缘提取 |
+| trimesh | 4.4.9 | 3D 网格生成与离屏渲染 |
+| pyglet | 1.5.31 | trimesh 离屏渲染后端（要求 <2） |
+| scipy | 1.18.1 | trimesh 平滑着色图引擎 |
+| pillow | 10.4.0 | 图像读写（预留，当前代码未直接使用） |
+
 ## 部署步骤
 
 ### Windows
@@ -48,14 +61,11 @@
 git clone <your-repo-url>
 cd <repo-name>
 
-:: 2. 一键安装（自动创建 venv 并安装依赖）
+:: 2. 一键安装（首次，自动创建 venv 并安装依赖）
 install.bat
 
-:: 3. 激活虚拟环境
-venv\Scripts\activate.bat
-
-:: 4. 启动程序（必须在项目根目录执行）
-python src\main.py
+:: 3. 一键启动（自动激活 venv 并运行主程序）
+run.bat
 ```
 
 ### macOS
@@ -65,23 +75,21 @@ python src\main.py
 git clone <your-repo-url>
 cd <repo-name>
 
-# 2. 一键安装（首次先赋予执行权限）
-chmod +x install.sh
+# 2. 一键安装（首次，先赋予执行权限）
+chmod +x install.sh run.sh
 ./install.sh
 
-# 3. 激活虚拟环境
-source venv/bin/activate
-
-# 4. 启动程序（必须在项目根目录执行）
-python src/main.py
+# 3. 一键启动（自动激活 venv 并运行主程序）
+./run.sh
 ```
 
-> **提示**：不想激活环境时，也可直接用 `venv\Scripts\python.exe src\main.py`（Windows）或 `venv/bin/python src/main.py`（macOS）。
+> **手动方式（可选）**：不想用一键脚本时，先激活环境再运行——Windows：`venv\Scripts\activate.bat` 然后 `python src\main.py`；macOS：`source venv/bin/activate` 然后 `python src/main.py`。
 
 ## 运行说明
 
-- 入口为 `src/main.py`，统一在 `if __name__ == "__main__"` 中依次执行 AI 与 3D 两部分。
-- **务必在项目根目录运行**：代码使用相对路径（`output/`、`assets/`），依赖当前工作目录。
+- 推荐用 `run.bat`（Windows）/ `./run.sh`（macOS）一键启动：脚本会自动切到项目根目录、激活 venv 并运行 `src/main.py`。
+- 入口统一在 `if __name__ == "__main__"` 中依次执行 AI 与 3D 两部分。
+- **务必在项目根目录运行**（一键脚本已自动处理）：代码使用相对路径（`output/`、`assets/`），依赖当前工作目录。
 - 运行全程无窗口弹出（离屏渲染），控制台打印完成信息后即结束。
 
 ## 输出说明
@@ -103,12 +111,14 @@ python src/main.py
 | `Library "EGL" not found` | 设置了 `PYGLET_HEADLESS`，Windows 无 EGL | 移除该环境变量，`visible=False` 已足够离屏 |
 | `save_image() got multiple values for 'resolution'` | trimesh 4.4.9 的 save_image 不接收文件路径 | 用 `save_image(resolution=...)` 返回 bytes 再写文件 |
 | `python` 命令打开 Microsoft Store | 装的是 Store 占位符，非真 Python | 到 python.org 安装 3.12，勾选 Add to PATH |
-| output 目录无图片 | 不在项目根目录运行 | `cd` 到项目根目录后重跑 |
+| `run.bat` / `run.sh` 提示未找到 venv | 还没安装依赖 | 先运行 `install.bat` / `./install.sh` |
+| output 目录无图片 | 不在项目根目录运行 | 用一键脚本，或在项目根目录运行 |
 | pip 安装依赖失败 | Python 版本过旧 | 升级到 Python 3.12 |
 
 ## 交付物清单
 
 - **环境配置文档**：`requirements.txt`、`install.bat`、`install.sh`
+- **一键启动脚本**：`run.bat`、`run.sh`
 - **项目代码**：`src/main.py`（含 `src/__init__.py`）
 - **运行说明**：`README.md`
 - **复现自检清单**：`docs/reproduction-checklist.md`
@@ -116,4 +126,4 @@ python src/main.py
 ## 版本控制约定
 
 - `venv/`、`__pycache__/`、`output/`（运行结果）、模型文件等均被 `.gitignore` 忽略。
-- `src/`、`docs/`、`assets/`、配置文件与文档正常提交。
+- `src/`、`docs/`、`assets/`、配置与脚本文件正常提交。
