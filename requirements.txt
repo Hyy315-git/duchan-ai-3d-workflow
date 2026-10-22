@@ -1,0 +1,10 @@
+# AI + 3D 项目依赖（精确锁定版本，Windows / macOS 通用）
+# Python 3.12（推荐，已实测）
+numpy==2.0.2
+opencv-python==4.10.0.84
+pillow==10.4.0
+trimesh==4.4.9
+
+# trimesh 离屏渲染必需：pyglet<2（渲染后端）+ scipy（平滑着色图引擎）
+pyglet==1.5.31
+scipy==1.18.1
